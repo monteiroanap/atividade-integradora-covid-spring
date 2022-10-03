@@ -1,6 +1,7 @@
 package br.com.covid.spring03.controller;
 
 import br.com.covid.spring03.dtos.GrupoRiscoDTO;
+import br.com.covid.spring03.exceptions.NomeSintomaNaoEncontradoException;
 import br.com.covid.spring03.modelo.Pessoa;
 import br.com.covid.spring03.modelo.Sintomas;
 import br.com.covid.spring03.services.GerenciaPessoas;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 //@RequestMapping("/consulta")
 public class ConsultaController {
 
-    @Autowired // anotacao para ingecao de dependencias
+    @Autowired // anotacao para injecao de dependencias
     private GerenciaSintomas gerenciaSintomas;
     @Autowired
     private GerenciaPessoas gerenciaPessoas;
@@ -29,16 +30,18 @@ public class ConsultaController {
     }
     @GetMapping ("/findSymptom/{nome}")
     public ResponseEntity<String> buscarSintomas(@PathVariable String nome){
-        Sintomas sintoma = gerenciaSintomas.buscaSintomasNome(nome); // busca sintoma pelo nome
-        if(sintoma != null){
+        Sintomas sintoma;
+        try{
+            sintoma = gerenciaSintomas.buscaSintomasNome(nome);// busca sintoma pelo nome
             return new ResponseEntity<>(sintoma.getNivelGravidade().toString(), HttpStatus.OK);
+        }catch (NomeSintomaNaoEncontradoException e){
+            return new ResponseEntity<>("sintomas not Found", HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>("sintomas not Found", HttpStatus.NO_CONTENT);
     }
     @GetMapping("/findRiskPerson")
     public ResponseEntity<List<GrupoRiscoDTO>> consutarGrupoRisco(){
         // referenciaList<GrupoRiscoDTO> gruposRisco = gerenciaPessoas.consultarPessoaRisco().stream().map(GrupoRiscoDTO::new).collect(Collectors.toList());
-       List<GrupoRiscoDTO> gruposRisco = gerenciaPessoas.consultarPessoaRisco().stream().map(p -> new GrupoRiscoDTO(p)).collect(Collectors.toList());
+       List<GrupoRiscoDTO> gruposRisco = gerenciaPessoas.consultarPessoaRisco().stream().filter(Pessoa::isGrupoRisco).map(p -> new GrupoRiscoDTO(p)).collect(Collectors.toList());
         return new ResponseEntity<>(gruposRisco, HttpStatus.OK);
 
     }

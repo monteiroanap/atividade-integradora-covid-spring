@@ -9,8 +9,7 @@ public class Pessoa {
     private int idade;
     private List<Sintomas> sintomas;
 
-    public Pessoa(long id, String nome, String sobrenome, int idade, List<Sintomas> sintomas) {
-        this.id = id;
+    public Pessoa(String nome, String sobrenome, int idade, List<Sintomas> sintomas) {
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.idade = idade;
@@ -21,6 +20,9 @@ public class Pessoa {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;

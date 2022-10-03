@@ -8,10 +8,36 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GrupoRiscoDTO implements Serializable {
-// aqui é convertido a estrutura de dados em um formato que possa ser trafegado : json.
-    String nome;
-    int idade;
-    List<String> sintomas;
+    private static final long serialVersionUID = 1L;
+
+    // aqui é convertido a estrutura de dados em um formato que possa ser trafegado : json.
+    private String nome;
+    private int idade;
+    private List<String> sintomas;
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getIdade() {
+        return idade;
+    }
+
+    public void setIdade(int idade) {
+        this.idade = idade;
+    }
+
+    public List<String> getSintomas() {
+        return sintomas;
+    }
+
+    public void setSintomas(List<String> sintomas) {
+        this.sintomas = sintomas;
+    }
 
     public GrupoRiscoDTO(Pessoa pessoa){
         this.nome = pessoa.getNome();
